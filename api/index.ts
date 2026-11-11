@@ -149,7 +149,7 @@ export function instagramParse(content: string, _fileType: string = 'auto'): Set
           if (Array.isArray(record.string_list_data)) {
             for (const item of record.string_list_data as Array<Record<string, unknown>>) {
               let value = String(item.value ?? '').trim().toLowerCase();
-              // No "value" field — extract from href like instagram.com/_u/username
+              // No "value" field. Extract from href like instagram.com/_u/username
               if (!value && item.href) {
                 const href = String(item.href);
                 const m = href.match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9._]{1,30})\/?$/);
@@ -211,7 +211,6 @@ export function compareLists(data: {
   const mutuals = [...followers].filter(u => following.has(u)).sort();
   const notFolback = [...following].filter(u => !followers.has(u)).sort();
   const onlyFollowers = [...followers].filter(u => !following.has(u)).sort();
-  const onlyFollowing = [...following].filter(u => !followers.has(u)).sort();
 
   const makeList = (items: string[]) =>
     items.map(u => ({ username: u, profile_url: `https://instagram.com/${u}` }));
@@ -220,7 +219,6 @@ export function compareLists(data: {
     mutuals: makeList(mutuals),
     notFolback: makeList(notFolback),
     onlyFollowers: makeList(onlyFollowers),
-    onlyFollowing: makeList(onlyFollowing),
   };
 }
 

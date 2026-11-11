@@ -24,20 +24,12 @@ const COLORS = {
     dot: 'bg-blue-500 dark:bg-blue-400',
     badge: 'bg-blue-100 dark:bg-black/20 text-blue-700 dark:text-blue-400',
   },
-  onlyFollowing: {
-    bg: 'bg-purple-50 dark:bg-purple-500/10',
-    border: 'border-purple-200 dark:border-purple-500/30',
-    text: 'text-purple-600 dark:text-purple-400',
-    dot: 'bg-purple-500 dark:bg-purple-400',
-    badge: 'bg-purple-100 dark:bg-black/20 text-purple-700 dark:text-purple-400',
-  },
 } as const;
 
 const KEYS: Record<SectionKey, TranslationKey> = {
   mutuals: 'results.mutuals',
   notFolback: 'results.notFolback',
   onlyFollowers: 'results.onlyFollowers',
-  onlyFollowing: 'results.onlyFollowing',
 };
 
 type SectionKey = keyof typeof COLORS;
@@ -49,7 +41,6 @@ interface Props {
     mutuals: ReadonlyArray<{ username: string; profile_url: string }>;
     notFolback: ReadonlyArray<{ username: string; profile_url: string }>;
     onlyFollowers: ReadonlyArray<{ username: string; profile_url: string }>;
-    onlyFollowing: ReadonlyArray<{ username: string; profile_url: string }>;
   };
 }
 
@@ -73,7 +64,7 @@ export default function ResultsDisplay({ results }: Props) {
       </div>
 
       {/* Grid of sections */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {SECTIONS.map(key => (
           <SectionCard key={key} section={key} data={results[key]} label={t(KEYS[key])} />
         ))}

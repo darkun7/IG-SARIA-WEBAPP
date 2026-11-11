@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
 import ImagePreview from './ImagePreview';
+import { AlertTriangleIcon } from './Icons';
 
 export default function HowToGuide() {
   const { t } = useI18n();
@@ -15,11 +16,15 @@ export default function HowToGuide() {
             <li>{t('guide.step1.s1')}</li>
             <li>{t('guide.step1.s2')}</li>
             <li>{t('guide.step1.s3')}</li>
-            <li>{t('guide.step1.s4')}</li>
+            <li>
+              {t('guide.step1.s4.prefix')}
+              <strong>{t('guide.step1.s4.emphasis')}</strong>
+              {t('guide.step1.s4.suffix')}
+            </li>
             <li>{t('guide.step1.s5')}</li>
           </ol>
           <div className="mt-3 px-4 py-3 rounded-xl border border-amber-300 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-300 text-sm flex items-start gap-2">
-            <span className="text-lg leading-none mt-0.5">⚠️</span>
+            <AlertTriangleIcon className="w-5 h-5 shrink-0 mt-0.5" />
             <span>{t('guide.step1.warning')}</span>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-3">

@@ -10,7 +10,6 @@ interface CompareResult {
   mutuals: Array<{ username: string; profile_url: string }>;
   notFolback: Array<{ username: string; profile_url: string }>;
   onlyFollowers: Array<{ username: string; profile_url: string }>;
-  onlyFollowing: Array<{ username: string; profile_url: string }>;
 }
 
 async function compareFiles(

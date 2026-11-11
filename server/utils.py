@@ -31,7 +31,7 @@ def _parse_json_usernames(content: str) -> set[str]:
             if "string_list_data" in obj:
                 for item in obj["string_list_data"]:
                     value = item.get("value", "").strip().lower()
-                    # No "value" field — extract from href like instagram.com/_u/username
+                    # No "value" field. Extract from href like instagram.com/_u/username
                     if not value and "href" in item:
                         m = re.search(r"instagram\.com/(?:_u/)?([A-Za-z0-9._]{1,30})/?$", str(item["href"]))
                         if m:
@@ -172,7 +172,6 @@ def compare_lists(data: dict) -> dict:
     mutuals = sorted(followers & following)
     not_folback = sorted(following - followers)
     only_followers = sorted(followers - following)
-    only_following = sorted(following - followers)
 
     return {
         "mutuals": [{"username": u, "profile_url": f"https://instagram.com/{u}"}
@@ -181,6 +180,4 @@ def compare_lists(data: dict) -> dict:
                         } for u in not_folback],
         "onlyFollowers": [{"username": u, "profile_url": f"https://instagram.com/{u}"
                            } for u in only_followers],
-        "onlyFollowing": [{"username": u, "profile_url": f"https://instagram.com/{u}"
-                           } for u in only_following],
     }

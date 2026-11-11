@@ -1,16 +1,16 @@
 # IG Follower Compare
 
-Compare your Instagram followers and following lists. Upload two exported data files and instantly see **mutuals**, **not following back**, **only followers**, and **only following** — each with clickable links straight to the profiles.
+Compare your Instagram followers and following lists. Upload two exported data files and instantly see **mutuals**, **not following back**, and **only followers**. Each result has a clickable link to the profile.
 
 ## Features
 
 - Upload `followers` and `following` files via drag & drop or file picker
-- Parses Instagram data export CSVs (handles the standard `Username\nName` format)
+- Parses Instagram data exports in JSON, HTML, CSV/TXT, and ZIP formats.
+- ZIP exports are extracted in the browser and automatically routed to the Followers and Following lists.
 - Four result sections, each color-coded:
-  - **Mutuals** (green) — you follow them and they follow you
-  - **Not Following Back** (orange) — you follow them, they don't follow you
-  - **Only Followers** (blue) — they follow you, you don't follow them
-  - **Only Following** (purple) — you follow them (not mutual)
+  - **Mutuals** (green): you follow them and they follow you
+  - **Not Following Back** (orange): you follow them, they don't follow you
+  - **Only Followers** (blue): they follow you, you don't follow them
 - Every username links out to `https://instagram.com/<username>`
 - Responsive UI built with Tailwind CSS
 
@@ -50,30 +50,32 @@ IG-follower-compare/
 
 Follow these steps once to get your `followers` and `following` files, then upload them to the tool.
 
-### Step 1 — Request the data download
+### Step 1: Request the data download
 
 1. Open Instagram on **mobile or desktop** and log in.
 2. Go to your profile → **Settings** → **Accounts Center**.
 3. Tap **Your information and permissions** → **Export your information** → **Create Export** → **Export to Device**.
 4. Select your profile, then tick **Customize Information** → under **Connections**, tick ☑ **Followers and following**.
-5. Set **Format** to *JSON* or *HTML* (this tool accepts both — JSON is recommended), and **MOST IMPORTANTLY**: set **Range** to **All time** so no data is missed.
+5. Set **Format** to *JSON* or *HTML*. This tool accepts both, but JSON is recommended. **MOST IMPORTANT: set Range to All time** so no data is missed.
 6. Turn on **Email notification** so Instagram emails you when the download is ready, then tap **Submit request / Create files**.
 
-> ⚠️ **Make sure Range is set to All time!** If you choose a limited date range, the export will only contain accounts from that period and the comparison results will be inaccurate.
+> **Important:** Make sure Range is set to All time. If you choose a limited date range, the export will only contain accounts from that period and the comparison results will be inaccurate.
 
-### Step 2 — Wait for the email
+### Step 2: Wait for the email
 
 - Instagram typically takes **from a few minutes up to a few days** to prepare the files.
 - You'll get an email when it's ready, with a **Download** button/link.
 - For large accounts the file can be several hundred MB, so it may take a while to download.
 
-### Step 3 — Download the ZIP
+### Step 3: Download the ZIP
 
 1. Open the email and tap **Download your information**.
 2. Instagram emails you a secure link (valid for ~4 days). Open it and download the ZIP archive.
 3. Do **not** rename the ZIP or change the folder structure after unzipping.
 
-### Step 4 — Unzip the archive
+### Step 4: Upload the ZIP or unzip it
+
+You can upload the ZIP directly in **ZIP** mode. If you prefer the two-file modes, extract it first:
 
 - **Windows:** right-click the ZIP → **Extract All...**
 - **macOS:** double-click the ZIP (it auto-extracts).
@@ -91,23 +93,26 @@ instagram-yourusername-.../
 
 > The exact filenames can vary (e.g. `followers_1.json`, `following_1.json`, or `.html` versions). Pick the two files that contain **followers** and **following** respectively.
 
-### Step 5 — Upload and compare
+### Step 5: Upload and compare
 
 1. Open the tool and click (or drag & drop) the **followers** file into the **Followers** box.
 2. Click (or drag & drop) the **following** file into the **Following** box.
 3. Click **Compare Now**.
-4. Browse the four sections — **Mutuals**, **Not Following Back**, **Only Followers**, **Only Following** — and click any username to open their Instagram profile.
+4. Browse the three sections: **Mutuals**, **Not Following Back**, and **Only Followers**. Click any username to open their Instagram profile.
 
 ### What files can the tool read?
 
 The tool auto-detects the file type, so it accepts:
 
-- **JSON** export — `followers_1.json` / `following.json` (recommended, standard download format)
-- **HTML** export — `followers_1.html` / `following.html`
-- **CSV** with a `Username` column
+- **ZIP** export: upload the single Instagram archive and the app extracts both lists automatically.
+- Numbered files such as `followers_1.json` and `followers_2.json` are combined automatically.
+- **JSON** export: upload `followers_1.json` / `following.json` (recommended, standard download format)
+- **HTML** export: upload `followers_1.html` / `following.html`
+- **CSV/TXT** with a `Username` column
 - Plain text copies of the follower/following tables
 
-> 💡 You only need the two list files — no other part of the export is used. Don't upload photos, stories, or the entire ZIP.
+> ZIP mode only needs the archive. JSON, HTML, and CSV/TXT modes use the two list files. Files stay in your browser during comparison.
+> Uploads are limited to 200 MB per file.
 
 ## Local Development
 
@@ -155,7 +160,7 @@ Open http://localhost:5173
 
 ### 4. Point the frontend at the local backend
 
-**No setup needed** — the Vite dev server already proxies `/api/*` requests to the backend at `http://localhost:8000` (see `client/vite.config.ts`).
+**No setup needed.** The Vite dev server already proxies `/api/*` requests to the backend at `http://localhost:8000` (see `client/vite.config.ts`).
 
 > Only if you run the backend on a different port, create `client/.env.local`:
 >
@@ -175,7 +180,7 @@ npm run build            # builds client/ → client/dist
 
 The project is configured for a single Vercel project: the React app is served as static files and `/api/*` requests are handled by the serverless function in `api/index.ts`.
 
-### Option A — Deploy via CLI
+### Option A: Deploy via CLI
 
 1. Install the Vercel CLI:
 
@@ -190,7 +195,7 @@ vercel            # preview deployment
 vercel --prod     # production deployment
 ```
 
-### Option B — Deploy via Git
+### Option B: Deploy via Git
 
 1. Push this repo to GitHub/GitLab/Bitbucket.
 2. In the [Vercel Dashboard](https://vercel.com/new), click **Add New → Project**.
@@ -246,13 +251,12 @@ Both endpoints return:
 {
   "mutuals":       [{ "username": "bob",    "profile_url": "https://instagram.com/bob" }],
   "notFolback":    [{ "username": "charlie", "profile_url": "https://instagram.com/charlie" }],
-  "onlyFollowers": [{ "username": "alice",   "profile_url": "https://instagram.com/alice" }],
-  "onlyFollowing": [{ "username": "dave",    "profile_url": "https://instagram.com/dave" }]
+  "onlyFollowers": [{ "username": "alice",   "profile_url": "https://instagram.com/alice" }]
 }
 ```
 
 ## Notes
 
-- All comparison happens server-side. Files are not stored anywhere.
+- The web app compares files in your browser. Files are not stored anywhere.
 - `api/index.ts` (Node) is used on Vercel; `server/` (FastAPI) is used for local development. The comparison logic is mirrored in both (`server/utils.py` and `api/index.ts`).
-- Private Instagram accounts may not resolve when clicking through — this is normal.
+- Private Instagram accounts may not resolve when clicking through. This is normal.
